@@ -15,7 +15,10 @@
     @endisset
 
     <!-- Styles / Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css'])
+    @isset($scripts)
+        {{ $scripts }}
+    @endisset
 </head>
 
 <body class="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-900">

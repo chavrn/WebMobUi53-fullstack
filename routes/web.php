@@ -19,6 +19,14 @@ Route::get('/about', function () {
     return view('about');
 });
 
+Route::get('/polls/results-test', function () {
+    return view('polls.results');
+});
+
+Route::get('/polls/builder-test', function () {
+    return view('polls.builder');
+});
+
 Route::get('/@{username}', [ProfileController::class, 'show'])->where('username', '[A-Za-z0-9-_]+');
 
 Route::resource('posts', PostController::class)->except(['index', 'show'])->middleware('auth');
