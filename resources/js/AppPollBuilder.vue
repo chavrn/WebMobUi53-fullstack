@@ -9,9 +9,7 @@
   const { fetchApi } = useFetchApi();
 
   const getResult = ref(null);
-  const getError = ref(null);
   const postResult = ref(null);
-  const postError = ref(null);
 
   function handleError(err) {
     if (err?.status === 401) window.location.href = props.loginUrl;
@@ -44,20 +42,18 @@
   <section>
     <h2>GET /api/v1/foo</h2>
     <pre v-if="getResult">{{ getResult }}</pre>
-    <pre v-else-if="getError">Erreur {{ getError.status }} : {{ getError.statusText }}</pre>
     <p v-else>Chargement...</p>
   </section>
 
   <section>
     <h2>POST /api/v1/foo</h2>
     <pre v-if="postResult">{{ postResult }}</pre>
-    <pre v-else-if="postError">Erreur {{ postError.status }} : {{ postError.statusText }}</pre>
     <p v-else>Chargement...</p>
   </section>
 </template>
 
 <style scoped>
-section {
-  margin-top: 1rem;
-}
+  section {
+    margin-top: 1rem;
+  }
 </style>
