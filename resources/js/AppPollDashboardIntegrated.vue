@@ -1,50 +1,26 @@
 <script setup>
-  import { watch } from 'vue';
-  import { useFetchApi } from './composables/useFetchApi';
-  import { usePolling } from './composables/usePolling';
+import { watch } from 'vue';
+import PollTable from './components/PollTable.vue';
+import { useFetchApi } from './composables/useFetchApi';
 
-  const props = defineProps({
+const props = defineProps({
     loginUrl: { type: String, default: null },
-  });
+});
 
-  const { fetchApiToRef } = useFetchApi();
+const { fetchApiToRef } = useFetchApi();
+const { data: polls, error, fetchNow } = fetchApiToRef({ url: '/polls' });
 
-  const { data: getResult, error: getError, fetchNow } = fetchApiToRef({ url: 'polls/' });
-  const { data: postResult, error: postError } = fetchApiToRef({ url: '/foo', data: { id: 1 } });
-
-  function handleError(err) {
+function handleError(err) {
     if (!err) return;
-    if (err?.status === 401) {
-      window.location.href = props.loginUrl;
-    } else {
-      console.error(err);
-    }
-  }
+    if (err?.status === 401) window.location.href = props.loginUrl;
+}
 
-  watch(getError, err => handleError(err));
-  watch(postError, handleError);
-
-  usePolling(fetchNow);
+watch(error, handleError);
 </script>
 
 <template>
-  <h1>Dashboard intégré</h1>
-
-  <section>
-    <h2>GET /api/v1/polls</h2>
-    <pre v-if="getResult">{{ getResult }}</pre>
-    <p v-else>Chargement...</p>
-  </section>
-
-  <section>
-    <h2>POST /api/v1/foo</h2>
-    <pre v-if="postResult">{{ postResult }}</pre>
-    <p v-else>Chargement...</p>
-  </section>
+    <main class="p-6">
+        <h1 class="mb-6 text-2xl font-bold">Mes sondages</h1>
+        <PollTable :polls="polls ?? []" @deleted="fetchNow" />
+    </main>
 </template>
-
-<style scoped>
-  section {
-    margin-top: 1rem;
-  }
-</style>
