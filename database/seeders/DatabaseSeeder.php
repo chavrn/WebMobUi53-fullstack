@@ -139,30 +139,72 @@ class DatabaseSeeder extends Seeder
                     ]
                 ]);
 
-                // Insert a test poll for John Doe
+                // Insert test polls for John Doe
                 DB::table('polls')->insert([
-                    'id' => 1,
-                    'user_id' => 1,
-                    'title' => 'test',
-                    'question' => 'Quelle est votre réponse ?',
-                    'secret_token' => \Illuminate\Support\Str::random(32),
-                    'is_draft' => true,
-                    'allow_multiple_choices' => false,
-                    'allow_vote_change' => false,
-                    'results_public' => false,
-                    'duration' => null,
-                    'started_at' => null,
-                    'ends_at' => null,
-                    'created_at' => new \DateTime('2026-04-19 10:00:00'),
-                    'updated_at' => new \DateTime('2026-04-19 10:00:00'),
+                    [
+                        'id' => 1,
+                        'user_id' => 1,
+                        'title' => 'test',
+                        'question' => 'Quelle est votre réponse ?',
+                        'secret_token' => \Illuminate\Support\Str::random(32),
+                        'is_draft' => true,
+                        'allow_multiple_choices' => false,
+                        'allow_vote_change' => false,
+                        'results_public' => false,
+                        'duration' => null,
+                        'started_at' => null,
+                        'ends_at' => null,
+                        'created_at' => new \DateTime('2026-04-19 10:00:00'),
+                        'updated_at' => new \DateTime('2026-04-19 10:00:00'),
+                    ],
+                    [
+                        'id' => 2,
+                        'user_id' => 1,
+                        'title' => 'Couleur préférée',
+                        'question' => 'Quelle est votre couleur préférée ?',
+                        'secret_token' => \Illuminate\Support\Str::random(32),
+                        'is_draft' => true,
+                        'allow_multiple_choices' => false,
+                        'allow_vote_change' => false,
+                        'results_public' => false,
+                        'duration' => null,
+                        'started_at' => null,
+                        'ends_at' => null,
+                        'created_at' => new \DateTime('2026-04-19 10:05:00'),
+                        'updated_at' => new \DateTime('2026-04-19 10:05:00'),
+                    ],
+                    [
+                        'id' => 3,
+                        'user_id' => 1,
+                        'title' => 'Activité du week-end',
+                        'question' => 'Que aimez-vous faire le week-end ?',
+                        'secret_token' => \Illuminate\Support\Str::random(32),
+                        'is_draft' => true,
+                        'allow_multiple_choices' => false,
+                        'allow_vote_change' => false,
+                        'results_public' => false,
+                        'duration' => null,
+                        'started_at' => null,
+                        'ends_at' => null,
+                        'created_at' => new \DateTime('2026-04-19 10:10:00'),
+                        'updated_at' => new \DateTime('2026-04-19 10:10:00'),
+                    ],
                 ]);
 
-                // Insert options for the test poll
+                // Insert options for the test polls
                 DB::table('poll_options')->insert([
                     ['poll_id' => 1, 'label' => 'Réponse A', 'created_at' => new \DateTime('2026-04-19 10:00:00'), 'updated_at' => new \DateTime('2026-04-19 10:00:00')],
                     ['poll_id' => 1, 'label' => 'Réponse B', 'created_at' => new \DateTime('2026-04-19 10:00:00'), 'updated_at' => new \DateTime('2026-04-19 10:00:00')],
                     ['poll_id' => 1, 'label' => 'Réponse C', 'created_at' => new \DateTime('2026-04-19 10:00:00'), 'updated_at' => new \DateTime('2026-04-19 10:00:00')],
                     ['poll_id' => 1, 'label' => 'La réponse D', 'created_at' => new \DateTime('2026-04-19 10:00:00'), 'updated_at' => new \DateTime('2026-04-19 10:00:00')],
+                    ['poll_id' => 2, 'label' => 'Rouge', 'created_at' => new \DateTime('2026-04-19 10:05:00'), 'updated_at' => new \DateTime('2026-04-19 10:05:00')],
+                    ['poll_id' => 2, 'label' => 'Bleu', 'created_at' => new \DateTime('2026-04-19 10:05:00'), 'updated_at' => new \DateTime('2026-04-19 10:05:00')],
+                    ['poll_id' => 2, 'label' => 'Vert', 'created_at' => new \DateTime('2026-04-19 10:05:00'), 'updated_at' => new \DateTime('2026-04-19 10:05:00')],
+                    ['poll_id' => 2, 'label' => 'Jaune', 'created_at' => new \DateTime('2026-04-19 10:05:00'), 'updated_at' => new \DateTime('2026-04-19 10:05:00')],
+                    ['poll_id' => 3, 'label' => 'Lire', 'created_at' => new \DateTime('2026-04-19 10:10:00'), 'updated_at' => new \DateTime('2026-04-19 10:10:00')],
+                    ['poll_id' => 3, 'label' => 'Faire du sport', 'created_at' => new \DateTime('2026-04-19 10:10:00'), 'updated_at' => new \DateTime('2026-04-19 10:10:00')],
+                    ['poll_id' => 3, 'label' => 'Voyager', 'created_at' => new \DateTime('2026-04-19 10:10:00'), 'updated_at' => new \DateTime('2026-04-19 10:10:00')],
+                    ['poll_id' => 3, 'label' => 'Dormir', 'created_at' => new \DateTime('2026-04-19 10:10:00'), 'updated_at' => new \DateTime('2026-04-19 10:10:00')],
                 ]);
             }
         );

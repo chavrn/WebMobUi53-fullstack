@@ -214,6 +214,7 @@ return [
         ],
         'index' => [
             'title' => 'Tous les posts',
+            'polls' => 'Tous les sondages',
             'description' => 'Tous les posts de :app_name.',
         ],
         'edit' => [

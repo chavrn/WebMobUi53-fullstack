@@ -1,11 +1,13 @@
 <script setup>
 import { usePollStore } from '@/stores/usePollStore';
 
-const { polls, deletePoll } = usePollStore();
+const { polls, deletePoll, startPoll } = usePollStore();
 
 async function delPoll(id) {
-    console.log('delete Poll ID:', id);
     await deletePoll(id);
+}
+async function startPollAction(id) {
+    await startPoll(id);
 }
 </script>
 
@@ -26,7 +28,9 @@ async function delPoll(id) {
         </thead>
         <tbody>
         <tr v-for="poll in polls" :key="poll.id">
-            <td class="border px-3 py-2"><button @click="delPoll(poll.id)">Supp.</button></td>
+            <td class="border px-3 py-2"><button @click="delPoll(poll.id)" class="bg-red-600 text-white px-2 rounded">Supp.</button>
+                <button v-if="poll.is_draft" @click="startPollAction(poll.id)" class="bg-green-600 text-white px-2 rounded"> Start </button>
+            </td>
             <td class="border px-3 py-2">{{ poll.id }}</td>
             <td class="border px-3 py-2">{{ poll.title || '-' }}</td>
             <td class="border px-3 py-2">{{ poll.question }}</td>
@@ -39,12 +43,5 @@ async function delPoll(id) {
 </template>
 
 <style scoped>
-button {
-    background-color: #e3342f;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-}
+
 </style>

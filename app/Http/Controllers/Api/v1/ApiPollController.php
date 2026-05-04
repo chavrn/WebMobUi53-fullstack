@@ -81,5 +81,36 @@ class ApiPollController extends Controller
 
     public function start(Poll $poll)
     {
+        // Sécurité : seul le propriétaire peut lancer
+        if ($poll->user_id !== auth()->id()) {
+            return response()->json([
+                'message' => 'You are not allowed to start this poll.'
+            ], 403);
+        }
+
+        // Le sondage ne doit pas déjà être lancé
+        if (!$poll->is_draft) {
+            return response()->json([
+                'message' => 'This poll has already been started.'
+            ], 422);
+        }
+
+        // Un sondage doit avoir au moins 2 options
+        if ($poll->options()->count() < 2) {
+            return response()->json([
+                'message' => 'A poll must have at least 2 options before being started.'
+            ], 422);
+        }
+
+        // Lancer le sondage
+        $poll->update([
+            'is_draft' => false,
+            'started_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Poll successfully started.',
+            'poll' => $poll
+        ]);
     }
 }
