@@ -28,36 +28,39 @@ class ApiPollController extends Controller
         return response()->json($poll);
     }
 
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'                  => 'nullable|string|max:255',
-            'question'               => 'required|string|max:255',
-            'allow_multiple_choices' => 'nullable|boolean',
-            'allow_vote_change'      => 'nullable|boolean',
-            'results_public'         => 'nullable|boolean',
-            'duration'               => 'nullable|integer|min:1',
-            'options'                => 'required|array|min:2',
-            'options.*'              => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'question' => 'required|string|max:255',
+            'options' => 'required|array|min:2',
+            'options.*' => 'required|string|max:255',
+            'allow_multiple_choices' => 'boolean',
+            'results_public' => 'boolean',
+            'ends_at' => 'nullable|date',
         ]);
 
-        $poll = $request->user()->polls()->create([
-            'title'                  => $validated['title'] ?? null,
-            'question'               => $validated['question'],
-            'secret_token'           => Str::random(32),
-            'is_draft'               => true,
+        $poll = Poll::create([
+            'user_id' => $request->user()->id,
+            'title' => $validated['title'],
+            'question' => $validated['question'],
             'allow_multiple_choices' => $validated['allow_multiple_choices'] ?? false,
-            'allow_vote_change'      => $validated['allow_vote_change'] ?? false,
-            'results_public'         => $validated['results_public'] ?? false,
-            'duration'               => $validated['duration'] ?? null,
+            'results_public' => $validated['results_public'] ?? false,
+            'is_draft' => true,
+            'ends_at' => $validated['ends_at'] ?? null,
+            'secret_token' => Str::random(32),
         ]);
 
         foreach ($validated['options'] as $label) {
-            $poll->options()->create(['label' => $label]);
+            $poll->options()->create([
+                'label' => $label,
+            ]);
         }
 
         return response()->json($poll->load('options'), 201);
     }
+
 
     public function edit(Poll $poll)
     {

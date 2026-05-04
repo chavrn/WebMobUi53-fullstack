@@ -28,7 +28,22 @@ export function usePollStore() {
         }
     }
 
+
+    async function createPoll(data) {
+        const result = await fetchApi({
+            url: 'polls',
+            method: 'POST',
+            data: data,
+        })
+
+        if (result !== false) {
+            await fetchPolls()
+        }
+    }
+
+
+
     return {
-        polls, setPolls, fetchPolls, deletePoll, startPoll, }
+        polls, setPolls, fetchPolls, deletePoll, startPoll, createPoll, }
 
 }
