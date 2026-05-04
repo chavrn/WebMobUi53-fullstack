@@ -4,6 +4,10 @@ import { usePollStore } from '@/stores/usePollStore'
 
 const { createPoll } = usePollStore()
 
+const emit = defineEmits(['created'])
+
+const isDraft = ref(true)
+
 // Champs principaux
 const title = ref('')
 const question = ref('')
@@ -64,7 +68,10 @@ async function submit() {
             allow_multiple_choices: allowMultiple.value,
             results_public: resultsPublic.value,
             ends_at: endsAt.value,
+            isDraft: isDraft.value,
         })
+
+        emit('created')
 
         // Reset form
         title.value = ''
@@ -152,6 +159,27 @@ async function submit() {
                 <input type="checkbox" v-model="resultsPublic" />
                 Résultats publics
             </label>
+            <div class="space-y-1">
+                <p class="font-semibold">État du sondage</p>
+
+                <label class="block">
+                    <input
+                        type="radio"
+                        :value="true"
+                        v-model="isDraft"
+                    />
+                    Brouillon (non visible)
+                </label>
+
+                <label class="block">
+                    <input
+                        type="radio"
+                        :value="false"
+                        v-model="isDraft"
+                    />
+                    Publier immédiatement
+                </label>
+            </div>
         </div>
 
         <!-- Fin -->

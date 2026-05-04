@@ -33,7 +33,7 @@ export function usePollStore() {
         const result = await fetchApi({
             url: 'polls',
             method: 'POST',
-            data: data,
+            data,
         })
 
         if (result !== false) {

@@ -39,7 +39,10 @@ class ApiPollController extends Controller
             'allow_multiple_choices' => 'boolean',
             'results_public' => 'boolean',
             'ends_at' => 'nullable|date',
+            'isDraft' => 'boolean',
         ]);
+
+        $isDraft = $validated['isDraft'] ?? true;
 
         $poll = Poll::create([
             'user_id' => $request->user()->id,
@@ -47,7 +50,8 @@ class ApiPollController extends Controller
             'question' => $validated['question'],
             'allow_multiple_choices' => $validated['allow_multiple_choices'] ?? false,
             'results_public' => $validated['results_public'] ?? false,
-            'is_draft' => true,
+            'is_draft' => $isDraft,
+            'started_at' => $isDraft ? null : now(),
             'ends_at' => $validated['ends_at'] ?? null,
             'secret_token' => Str::random(32),
         ]);
