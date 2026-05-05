@@ -25,7 +25,19 @@ class ApiPollController extends Controller
             return response()->json(['message' => 'Poll not found.'], 404);
         }
 
-        return response()->json($poll);
+
+        return response()->json([
+            'id' => $poll->id,
+            'title' => $poll->title,
+            'question' => $poll->question,
+            'options' => $poll->options,
+            'is_draft' => $poll->is_draft,
+            'started_at' => $poll->started_at,
+            'ends_at' => $poll->ends_at,
+            'results_public' => $poll->results_public,
+            'has_ended' => $poll->ends_at ? now()->gt($poll->ends_at) : false,
+        ]);
+
     }
 
 
