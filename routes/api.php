@@ -19,11 +19,12 @@ Route::apiResource('v1/posts', ApiPostController::class)
 Route::get('/v1/polls/{token}', [ApiPollController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/v1/polls/{token}/vote', [ApiPollController::class, 'vote']);
     Route::get('/v1/foo', [ApiFooController::class, 'show']);
     Route::post('/v1/foo', [ApiFooController::class, 'store']);
     Route::get('/v1/polls', [ApiPollController::class, 'index']);
     Route::post('/v1/polls', [ApiPollController::class, 'store']);//crée un nouveau sondage
-    Route::get('/v1/polls/{poll}', [ApiPollController::class, 'edit']); //affiche détails d'un sondage pour édition
+    Route::get('/v1/polls/{poll}/edit', [ApiPollController::class, 'edit']); //affiche détails d'un sondage pour édition
     Route::put('/v1/polls/{poll}', [ApiPollController::class, 'update']); //met à jour un sondage existant
     Route::delete('/v1/polls/{poll}', [ApiPollController::class, 'destroy']);
     Route::post('/v1/polls/{poll}/start', [ApiPollController::class, 'start']); //démarre un sondage existant

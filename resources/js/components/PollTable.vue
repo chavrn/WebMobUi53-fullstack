@@ -1,7 +1,12 @@
 <script setup>
+import { ref } from 'vue'
 import { usePollStore } from '@/stores/usePollStore'
+import PollEditForm from '@/components/PollEditForm.vue'
 
 const { polls, deletePoll, startPoll } = usePollStore()
+
+const editingPollId = ref(null)
+const copiedPollId = ref(null)
 
 async function delPoll(id) {
     await deletePoll(id)
@@ -10,9 +15,26 @@ async function delPoll(id) {
 async function startPollAction(id) {
     await startPoll(id)
 }
+
+function shareUrl(token) {
+    return `${window.location.origin}/polls/${token}`
+}
+
+async function copyLink(poll) {
+    await navigator.clipboard.writeText(shareUrl(poll.secret_token))
+    copiedPollId.value = poll.id
+    setTimeout(() => { copiedPollId.value = null }, 2000)
+}
 </script>
 
 <template>
+    <PollEditForm
+        v-if="editingPollId"
+        :poll-id="editingPollId"
+        @updated="editingPollId = null"
+        @cancel="editingPollId = null"
+    />
+
     <p v-if="polls.length === 0">Aucun sondage.</p>
 
     <table v-else class="w-full border-collapse text-left">
@@ -30,7 +52,6 @@ async function startPollAction(id) {
 
         <tbody>
         <tr v-for="poll in polls" :key="poll.id">
-            <!-- ✅ COLONNE ACTIONS -->
             <td class="border px-3 py-2 space-x-2">
                 <button
                     @click="delPoll(poll.id)"
@@ -47,13 +68,32 @@ async function startPollAction(id) {
                     Start
                 </button>
 
+                <button
+                    v-if="poll.is_draft"
+                    @click="editingPollId = poll.id"
+                    class="bg-yellow-500 text-white px-2 py-1 rounded"
+                >
+                    Modifier
+                </button>
+
                 <a
-                    :href="`/polls/${poll.secret_token}`"
+                    :href="shareUrl(poll.secret_token)"
                     class="text-blue-600 underline"
                     target="_blank"
                 >
-                    Public
+                    Ouvrir
                 </a>
+
+                <button
+                    @click="copyLink(poll)"
+                    :title="shareUrl(poll.secret_token)"
+                    class="px-2 py-1 rounded border text-sm transition-colors"
+                    :class="copiedPollId === poll.id
+                        ? 'bg-green-100 border-green-500 text-green-700'
+                        : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'"
+                >
+                    {{ copiedPollId === poll.id ? 'Copié !' : 'Copier le lien' }}
+                </button>
             </td>
 
             <td class="border px-3 py-2">

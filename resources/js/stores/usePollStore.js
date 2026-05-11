@@ -41,9 +41,27 @@ export function usePollStore() {
         }
     }
 
+    async function fetchPollForEdit(id) {
+        return await fetchApi({ url: `polls/${id}/edit`, method: 'GET' })
+    }
 
+    async function updatePoll(id, data) {
+        const result = await fetchApi({
+            url: `polls/${id}`,
+            method: 'PUT',
+            data,
+        })
+
+        if (result !== false) {
+            await fetchPolls()
+        }
+
+        return result
+    }
 
     return {
-        polls, setPolls, fetchPolls, deletePoll, startPoll, createPoll, }
+        polls, setPolls, fetchPolls, deletePoll, startPoll, createPoll,
+        fetchPollForEdit, updatePoll,
+    }
 
 }
