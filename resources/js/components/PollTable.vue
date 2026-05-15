@@ -9,11 +9,11 @@ const editingPollId = ref(null)
 const copiedPollId = ref(null)
 
 async function delPoll(id) {
-    await deletePoll(id)
+    try { await deletePoll(id) } catch {}
 }
 
 async function startPollAction(id) {
-    await startPoll(id)
+    try { await startPoll(id) } catch {}
 }
 
 function shareUrl(token) {

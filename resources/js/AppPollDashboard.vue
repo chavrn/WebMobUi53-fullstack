@@ -1,22 +1,23 @@
 <script setup>
-    import { ref, onMounted } from 'vue'
-    import PollCreateForm from '@/components/PollCreateForm.vue'
-    import PollTable from '@/components/PollTable.vue'
-    import { usePollStore } from '@/stores/usePollStore'
+import { ref, onMounted } from 'vue'
+import PollCreateForm from '@/components/PollCreateForm.vue'
+import PollTable from '@/components/PollTable.vue'
+import AppToast from '@/components/AppToast.vue'
+import { usePollStore } from '@/stores/usePollStore'
 
-    const showCreateForm = ref(false)
-    const { fetchPolls } = usePollStore()
+const showCreateForm = ref(false)
+const { fetchPolls } = usePollStore()
 
-    onMounted(fetchPolls)
+onMounted(() => fetchPolls().catch(() => {}))
 
-    //fermer le formulaire après création
-    function onPollCreated() {
+function onPollCreated() {
     showCreateForm.value = false
 }
 </script>
 
-
 <template>
+    <AppToast />
+
     <main class="p-6">
         <h1 class="mb-6 text-2xl font-bold">Mes sondages</h1>
 
@@ -35,6 +36,5 @@
         />
 
         <PollTable />
-
     </main>
 </template>

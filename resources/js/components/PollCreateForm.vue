@@ -73,7 +73,6 @@ async function submit() {
 
         emit('created')
 
-        // Reset form
         title.value = ''
         question.value = ''
         options.value = [{ label: '' }, { label: '' }]
@@ -81,8 +80,8 @@ async function submit() {
         resultsPublic.value = false
         endsAt.value = null
 
-    } catch (e) {
-        error.value = 'Erreur lors de la création du sondage'
+    } catch {
+        // Erreur affichée via le système de notification
     } finally {
         loading.value = false
     }
@@ -201,9 +200,10 @@ async function submit() {
         <button
             type="submit"
             :disabled="loading"
-            class="bg-blue-600 text-white px-4 py-2 rounded"
+            class="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60 disabled:cursor-not-allowed"
         >
-            Créer le sondage
+            <span v-if="loading">Chargement…</span>
+            <span v-else>Créer le sondage</span>
         </button>
     </form>
 </template>

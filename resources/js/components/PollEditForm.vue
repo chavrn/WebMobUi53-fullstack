@@ -61,7 +61,7 @@ async function submit() {
         })
         emit('updated')
     } catch {
-        error.value = 'Erreur lors de la modification du sondage.'
+        // Erreur affichée via le système de notification
     } finally {
         loading.value = false
     }
@@ -119,8 +119,13 @@ async function submit() {
         <p v-if="error" class="text-red-600">{{ error }}</p>
 
         <div class="flex gap-2">
-            <button type="submit" :disabled="loading" class="bg-blue-600 text-white px-4 py-2 rounded">
-                Enregistrer
+            <button
+                type="submit"
+                :disabled="loading"
+                class="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+                <span v-if="loading">Chargement…</span>
+                <span v-else>Enregistrer</span>
             </button>
             <button type="button" @click="emit('cancel')" class="bg-gray-300 px-4 py-2 rounded">
                 Annuler

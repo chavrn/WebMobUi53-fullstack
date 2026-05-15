@@ -36,6 +36,14 @@ const canVote = computed(() =>
     isActive.value && poll.value.is_authenticated && !poll.value.user_has_voted
 )
 
+const formattedEndDate = computed(() => {
+    if (!poll.value?.ends_at) return null
+    return new Intl.DateTimeFormat('fr-CH', {
+        dateStyle: 'long',
+        timeStyle: 'short',
+    }).format(new Date(poll.value.ends_at))
+})
+
 function startPolling() {
     if (pollInterval.value) return
     pollInterval.value = setInterval(async () => {
@@ -120,10 +128,16 @@ onUnmounted(stopPolling)
 
             <!-- Résultats (sondage terminé, déjà voté, ou résultats publics) -->
             <template v-else-if="showResults">
-                <p class="text-sm font-medium mb-4"
-                   :class="poll.has_ended ? 'text-red-500' : 'text-green-600'">
-                    <template v-if="poll.has_ended">Sondage terminé</template>
-                    <template v-else-if="poll.user_has_voted">Votre vote a bien été enregistré</template>
+                <div v-if="poll.has_ended"
+                     class="mb-4 p-4 bg-red-50 border border-red-300 rounded-lg">
+                    <p class="font-semibold text-red-700">Sondage clôturé</p>
+                    <p class="text-red-600 text-sm mt-1">Il n'est plus possible de voter.</p>
+                    <p v-if="poll.ends_at" class="text-red-500 text-xs mt-1">
+                        Clôturé le {{ formattedEndDate }}
+                    </p>
+                </div>
+                <p v-else class="text-sm font-medium mb-4 text-green-600">
+                    <template v-if="poll.user_has_voted">Votre vote a bien été enregistré</template>
                     <template v-else>Résultats en temps réel</template>
                 </p>
 
@@ -165,12 +179,13 @@ onUnmounted(stopPolling)
                             :disabled="voting"
                             class="w-full text-left border px-4 py-3 rounded
                                    hover:bg-blue-50 hover:border-blue-400
-                                   disabled:opacity-50 transition-colors"
+                                   disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                             {{ option.label }}
                         </button>
                     </li>
                 </ul>
+                <p v-if="voting" class="text-sm text-gray-400 mt-3">Envoi en cours…</p>
             </template>
 
             <!-- Vote — choix multiples -->
@@ -189,9 +204,10 @@ onUnmounted(stopPolling)
                     @click="submitMultipleVotes"
                     :disabled="voting || selectedOptionIds.length === 0"
                     class="bg-blue-600 text-white px-4 py-2 rounded
-                           hover:bg-blue-700 disabled:opacity-50"
+                           hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Voter
+                    <span v-if="voting">Envoi en cours…</span>
+                    <span v-else>Voter</span>
                 </button>
             </template>
 
